@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AiOutlineCalendar } from "react-icons/ai";
+
 export const App = () => {
   const [capital, setCapital] = useState(0);
   const [juros, setJuros] = useState(0);
@@ -13,12 +14,27 @@ export const App = () => {
   let Vtotal;
 
   const handleCalculator = () => {
-    console.log(capitalT);
-    let investido = Number(capitalT) + mensal * periodo;
+    let investido = Number(capital) + mensal * periodo;
     setValorInvestido(investido);
 
+    let capitalI = capital;
+    let taxa = juros;
+    let mensalV = mensal;
+    let meses = periodo;
+
+    let jc = 0;
+    let jct = 0;
+
+    for (let i = 0; i < meses; i++) {
+      jc = (capitalI * taxa) / 100;
+      capitalI = Number(capitalI) + Number(jc) + Number(mensalV);
+      jct = jct + jc;
+    }
+
+    setJurosAcumulado(Math.trunc(jct));
+
     Vtotal = Number(investido) + Number(jct);
-    setTotal(Vtotal);
+    setTotal(Math.trunc(Vtotal));
     setModalResult(true);
   };
 
@@ -37,12 +53,12 @@ export const App = () => {
         <div className="flex">
           <div className="flex flex-col rounded w-[50%]">
             <span className="">Capital inicial</span>
-            <div className="flex mt-1 ">
-              <span className="bg-[#00de81] text-[#1d152a] p-2 text-lg font-semibold">
+            <div className="flex mt-1">
+              <span className="bg-[#169bc4] text-[#1d152a] p-2 text-lg font-semibold rounded-l-md">
                 R$
               </span>
               <input
-                className="bg-[#564968] outline-none pl-2 font-semibold text-lg"
+                className="bg-[#564968] outline-none pl-2 font-semibold text-lg rounded-r-md"
                 type="text"
                 onChange={(e) => setCapital(e.target.value)}
                 value={capital}
@@ -52,11 +68,11 @@ export const App = () => {
           <div className="flex flex-col rounded w-[50%]">
             <span className="">Taxa de juros</span>
             <div className="flex mt-1">
-              <span className="bg-[#00de81] text-[#1d152a] p-2 text-lg font-semibold">
+              <span className="bg-[#169bc4] text-[#1d152a] p-2 text-lg font-semibold rounded-l-md">
                 %
               </span>
               <input
-                className="bg-[#564968] outline-none pl-2 font-semibold text-lg"
+                className="bg-[#564968] outline-none pl-2 font-semibold text-lg rounded-r-md"
                 type="text"
                 onChange={(e) => setJuros(e.target.value)}
                 value={juros}
@@ -68,11 +84,11 @@ export const App = () => {
           <div className="flex flex-col rounded w-[50%]">
             <span className="">Valor mensal</span>
             <div className="flex mt-1">
-              <span className="bg-[#00de81] text-[#1d152a] p-2 text-lg font-semibold">
+              <span className="bg-[#169bc4] text-[#1d152a] p-2 text-lg font-semibold rounded-l-md">
                 R$
               </span>
               <input
-                className="bg-[#564968] outline-none pl-2 font-semibold text-lg"
+                className="bg-[#564968] outline-none pl-2 font-semibold text-lg rounded-r-md"
                 type="text"
                 onChange={(e) => setMensal(e.target.value)}
                 value={mensal}
@@ -82,11 +98,11 @@ export const App = () => {
           <div className="flex flex-col rounded w-[50%]">
             <span className="">Periodo</span>
             <div className="flex mt-1">
-              <span className="bg-[#00de81] text-[#1d152a] p-2 text-lg font-semibold">
+              <span className="bg-[#169bc4] text-[#1d152a] p-2 text-lg font-semibold rounded-l-md">
                 <AiOutlineCalendar size={26} />
               </span>
               <input
-                className="bg-[#564968] outline-none pl-2 font-semibold text-lg"
+                className="bg-[#564968] outline-none pl-2 font-semibold text-lg rounded-r-md"
                 type="text"
                 onChange={(e) => setPeriodo(e.target.value)}
                 value={periodo}
@@ -103,7 +119,7 @@ export const App = () => {
           Calcular
         </button>
         <button
-          className="text-[#00de81] hover:opacity-50"
+          className="text-[#169bc4] hover:opacity-50"
           onClick={handleClear}
         >
           Limpar
